@@ -16,7 +16,8 @@ export const MovieMenu = () => {
         onChange={(val) => setSearch(val)}
       />
 
-      <div className="pt-3 flex gap-x-2">
+      {/* h-20 so the searchbar is centered on the screen */}
+      <div className="h-20 pt-3 flex items-start gap-x-2">
         <Link
           to={`/movies/explore?movieSearch=${search}`}
           className="px-4 py-1 border rounded-lg font-medium bg-gray-800"
