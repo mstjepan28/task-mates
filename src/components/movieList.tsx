@@ -43,7 +43,7 @@ export const MovieList = ({
     /**
      * If the container is less than 300px, just return the container width
      */
-    if (containerWidth < 300) {
+    if (containerWidth < 400) {
       return containerWidth;
     }
 
@@ -51,6 +51,7 @@ export const MovieList = ({
      * Make sure that at least two movie posters fit in a row
      */
     const maxMoviesPerRow = Math.floor(containerWidth / (BASE_MOVIE_POSTER_WIDTH + MOVIE_CARD_GAP));
+
     if (maxMoviesPerRow < 2) {
       return Math.floor((containerWidth - MOVIE_CARD_GAP) / 2);
     }
@@ -60,8 +61,12 @@ export const MovieList = ({
      * a single movie poster so that the max gap between the posters is 20px
      */
     const totalGapWidth = (maxMoviesPerRow - 1) * MOVIE_CARD_GAP;
-    const availableWidth = containerWidth - totalGapWidth;
-    return Math.floor(availableWidth / maxMoviesPerRow);
+    const availableWidth = containerWidth - totalGapWidth - 2;
+
+    const movieRow = Math.floor(availableWidth / maxMoviesPerRow);
+    console.log({ maxMoviesPerRow, movieRow, totalGapWidth, availableWidth });
+
+    return movieRow;
   };
 
   const calculateFillerEntryCount = (movieWidth: number) => {
@@ -98,6 +103,7 @@ export const MovieList = ({
   return (
     <>
       {createPortal(<MovieDetailsModal baseRef={movieDetailsModalRef} />, document.body)}
+
       <div ref={onMount} className="basis-full overflow-y-auto mt-4">
         {isLoading ? (
           <LoadingIndicator />
