@@ -4,7 +4,7 @@ import { debounce } from "throttle-debounce";
 import { z } from "zod";
 import { tbdbRequestPopular, tbdbRequestSearch } from "../api/tmdbRequests";
 import { QueryKeys } from "../enums/queryKeys";
-import { movieSchema } from "../schemas/movieSchema";
+import { movieSchema, type TMovie } from "../schemas/movieSchema";
 import { useFilters } from "./useFilters";
 
 type TMovieFilters = {
@@ -39,14 +39,24 @@ export const useMovieList = () => {
     initialPageParam: 1,
   });
 
-  const pages = movieListQuery.data?.pages ?? [];
-  const movieList = pages.flatMap((page) => {
-    if (!page?.results) {
-      return [];
+  const getUniqueMovieList = () => {
+    const pages = movieListQuery.data?.pages ?? [];
+    const movieList = pages.flatMap((page) => page?.results ?? []);
+
+    const movieIdList = new Set();
+    const uniqueMovies: TMovie[] = [];
+
+    for (const movie of movieList) {
+      if (movieIdList.has(movie.id)) {
+        continue;
+      }
+
+      movieIdList.add(movie.id);
+      uniqueMovies.push(movie);
     }
 
-    return page.results;
-  });
+    return uniqueMovies;
+  };
 
   return {
     search: debounce(500, (movieSearch: string) => setFilters({ movieSearch })),
@@ -57,7 +67,7 @@ export const useMovieList = () => {
     },
 
     hasMore: movieListQuery.hasNextPage,
-    movieList: movieList,
+    movieList: getUniqueMovieList(),
 
     error: movieListQuery.error,
 
