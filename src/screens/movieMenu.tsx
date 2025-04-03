@@ -21,11 +21,12 @@ export const MovieMenu = () => {
         <Link
           to={`/movies/explore?movieSearch=${search}`}
           className="px-4 py-1 border rounded-lg font-medium bg-gray-800"
+          viewTransition
         >
           Search
         </Link>
 
-        <Link to={"/movies/ratings"} className="px-4 py-1 border rounded-lg font-medium bg-gray-800">
+        <Link to={"/movies/ratings"} className="px-4 py-1 border rounded-lg font-medium bg-gray-800" viewTransition>
           My Ratings
         </Link>
       </div>

@@ -12,7 +12,11 @@ export const SearchBar = ({
   onChange?: (val: string) => void;
 }) => {
   return (
-    <div id={id} className="w-full flex items-center gap-x-2 px-5 py-2 rounded-full border text-gray-100 bg-gray-800">
+    <div
+      id={id}
+      style={{ viewTransitionName: id }}
+      className="w-full flex items-center gap-x-2 px-5 py-2 rounded-full border text-gray-100 bg-gray-800"
+    >
       <HiSearch size={20} />
       <input
         type="text"
