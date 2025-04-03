@@ -9,12 +9,14 @@ export const MovieMenu = () => {
     <div className="h-full flex flex-col justify-center items-center p-4">
       <h1 className="text-5xl italic text-center py-4">𝓜𝓸𝓿𝓲𝓮𝓼</h1>
 
-      <SearchBar
-        id="movie-search"
-        defaultValue={search}
-        placeholder={"Search for a movie..."}
-        onChange={(val) => setSearch(val)}
-      />
+      <div className="w-full max-w-xl">
+        <SearchBar
+          id="movie-search"
+          defaultValue={search}
+          placeholder={"Search for a movie..."}
+          onChange={(val) => setSearch(val)}
+        />
+      </div>
 
       {/* h-20 so the searchbar is centered on the screen */}
       <div className="h-20 pt-3 flex items-start gap-x-2">
