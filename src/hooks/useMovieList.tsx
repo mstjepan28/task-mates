@@ -52,7 +52,10 @@ export const useMovieList = () => {
     search: debounce(500, (movieSearch: string) => setFilters({ movieSearch })),
     filters: filters,
 
-    fetchMore: movieListQuery.fetchNextPage,
+    fetchMore: async () => {
+      movieListQuery.fetchNextPage();
+    },
+
     hasMore: movieListQuery.hasNextPage,
     movieList: movieList,
 

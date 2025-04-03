@@ -4,7 +4,6 @@ import { GrDocumentMissing } from "react-icons/gr";
 import type { TMovie } from "../schemas/movieSchema";
 import { BASE_MOVIE_POSTER_WIDTH } from "../utils/constants";
 import { LoadingIndicator } from "./base/loadingIndicator";
-import { LoadMoreButton } from "./base/loadMoreButton";
 import type { TOverlayRef } from "./base/overlays/overlayElement";
 import { MovieCard } from "./movieCard";
 import { MovieDetailsModal } from "./popup/movieDetailsModal";
@@ -27,7 +26,7 @@ export const MovieList = ({
 
   hasNextPage: boolean;
   loadingNextPage: boolean;
-  onLoadMore: () => void;
+  onLoadMore: () => Promise<void>;
 }) => {
   const [moviePosterWidth, setMoviePosterWidth] = useState<number>(BASE_MOVIE_POSTER_WIDTH);
   const [fillerEntryCount, setFillerEntryCount] = useState(0);
@@ -63,10 +62,7 @@ export const MovieList = ({
     const totalGapWidth = (maxMoviesPerRow - 1) * MOVIE_CARD_GAP;
     const availableWidth = containerWidth - totalGapWidth - 2;
 
-    const movieRow = Math.floor(availableWidth / maxMoviesPerRow);
-    console.log({ maxMoviesPerRow, movieRow, totalGapWidth, availableWidth });
-
-    return movieRow;
+    return Math.floor(availableWidth / maxMoviesPerRow);
   };
 
   const calculateFillerEntryCount = (movieWidth: number) => {
@@ -100,6 +96,22 @@ export const MovieList = ({
     return () => window.removeEventListener("resize", onResize);
   };
 
+  const onLastMovieMount = (element: HTMLDivElement | null, index: number) => {
+    const isLastMovie = index === movieList.length - 1;
+    if (!element || !isLastMovie || !hasNextPage) {
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !loadingNextPage) {
+        onLoadMore();
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(element);
+  };
+
   return (
     <>
       {createPortal(<MovieDetailsModal baseRef={movieDetailsModalRef} />, document.body)}
@@ -111,9 +123,12 @@ export const MovieList = ({
           <pre>{errorMsg}</pre>
         ) : movieList.length > 0 ? (
           <div className="flex flex-wrap justify-around gap-5 p-4">
-            {movieList.map((movie) => {
-              const key = `${movie.title}-${movie.id}`;
-              return <MovieCard key={key} width={moviePosterWidth} movie={movie} onClick={() => onMovieClick(movie)} />;
+            {movieList.map((movie, index) => {
+              return (
+                <div key={`${movie.title}-${movie.id}`} ref={(e) => onLastMovieMount(e, index)}>
+                  <MovieCard width={moviePosterWidth} movie={movie} onClick={() => onMovieClick(movie)} />
+                </div>
+              );
             })}
 
             {Array.from({ length: fillerEntryCount }).map((_, index) => {
@@ -127,8 +142,6 @@ export const MovieList = ({
             <span className="text-3xl italic font-semibold">Nothing found</span>
           </div>
         )}
-
-        <LoadMoreButton hasNextPage={hasNextPage} loadingNextPage={loadingNextPage} onLoadMore={onLoadMore} />
       </div>
     </>
   );
