@@ -7,7 +7,11 @@ export const MovieExplorer = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <ListScreenHeader defaultValue={movieList.filters.movieSearch} search={(query) => movieList.search(query)} />
+      <ListScreenHeader
+        title="Explore Movies"
+        defaultValue={movieList.filters.movieSearch}
+        search={(query) => movieList.search(query)}
+      />
 
       <MovieList
         movieList={movieList.movieList}

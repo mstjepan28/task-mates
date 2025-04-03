@@ -7,7 +7,11 @@ export const RatingsList = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <ListScreenHeader defaultValue={reviewList.filters.reviewSearch} search={(query) => reviewList.search(query)} />
+      <ListScreenHeader
+        title="My Ratings"
+        defaultValue={reviewList.filters.reviewSearch}
+        search={(query) => reviewList.search(query)}
+      />
 
       <MovieList
         movieList={reviewList.movieList ?? []}

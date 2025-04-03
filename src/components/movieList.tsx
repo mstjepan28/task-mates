@@ -104,7 +104,7 @@ export const MovieList = ({
     <>
       {createPortal(<MovieDetailsModal baseRef={movieDetailsModalRef} />, document.body)}
 
-      <div ref={onMount} className="basis-full overflow-y-auto mt-4">
+      <div ref={onMount} className="basis-full overflow-y-auto">
         {isLoading ? (
           <LoadingIndicator />
         ) : errorMsg ? (
