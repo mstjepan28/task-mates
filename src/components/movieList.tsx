@@ -116,13 +116,13 @@ export const MovieList = ({
     <>
       {createPortal(<MovieDetailsModal baseRef={movieDetailsModalRef} />, document.body)}
 
-      <div ref={onMount} className="basis-full overflow-y-auto">
+      <div ref={onMount} className="basis-full overflow-y-auto mt-4">
         {isLoading ? (
           <LoadingIndicator />
         ) : errorMsg ? (
           <pre>{errorMsg}</pre>
         ) : movieList.length > 0 ? (
-          <div className="flex flex-wrap justify-around gap-5 p-4">
+          <div className="flex flex-wrap justify-around gap-5 px-4 pb-4">
             {movieList.map((movie, index) => {
               return (
                 <div key={`${movie.title}-${movie.id}`} ref={(e) => onLastMovieMount(e, index)}>
