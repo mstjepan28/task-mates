@@ -52,7 +52,9 @@ export const useReviewList = () => {
     search: debounce(500, (reviewSearch: string) => setFilters({ reviewSearch })),
     filters: filters,
 
-    fetchMore: reviewListQuery.fetchNextPage,
+    fetchMore: async () => {
+      reviewListQuery.fetchNextPage();
+    },
     hasMore: reviewListQuery.hasNextPage,
     movieList: movieList,
 

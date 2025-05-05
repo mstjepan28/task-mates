@@ -1,12 +1,8 @@
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import { FullScreenLayout } from "../layouts/fullScreenLayout";
-
-const lazyLoad = async (path: string) => {
-  const screen = await import(path);
-  const keys = Object.keys(screen);
-
-  return { Component: screen[keys[0]] };
-};
+import { MovieExplorer } from "../screens/movieExplorer";
+import { MovieMenu } from "../screens/movieMenu";
+import { RatingsList } from "../screens/ratingsList";
 
 export const MainRouter = () => {
   const router = createBrowserRouter([
@@ -20,15 +16,15 @@ export const MainRouter = () => {
         },
         {
           path: "/movies",
-          lazy: async () => lazyLoad("../screens/movieMenu.tsx"),
+          Component: MovieMenu,
         },
         {
           path: "/movies/explore",
-          lazy: async () => lazyLoad("../screens/movieExplorer"),
+          Component: MovieExplorer,
         },
         {
           path: "/movies/ratings",
-          lazy: async () => lazyLoad("../screens/ratingsList"),
+          Component: RatingsList,
         },
       ],
     },
